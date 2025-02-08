@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'movies',
     'home',
     'moviesSearch',
     'accounts',
@@ -57,8 +58,7 @@ ROOT_URLCONF = 'GTMovieSite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,
-                              'GTMovieSite/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'GTMovieSite/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
