@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
 from .forms import CustomUserCreationForm, CustomErrorList
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 @login_required
 def logout(request):
     auth_logout(request)
@@ -44,3 +46,23 @@ def signup(request):
             template_data['form'] = form
             return render(request, 'accounts/signup.html',
                           {'template_data': template_data})
+def reset_password(request):
+    template_data = {}
+    if request.method == "POST":
+        username = request.POST.get("username")
+        new_password = request.POST.get("new_password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if new_password != confirm_password:
+            template_data["error"] = "Passwords do not match."
+            return render(request, "accounts/reset_password.html", {"template_data": template_data})
+
+        try:
+            user = User.objects.get(username=username)
+            user.password = make_password(new_password)
+            user.save()
+            template_data["success"] = "Password reset successfully. You can now log in."
+        except User.DoesNotExist:
+            template_data["error"] = "Username not found."
+
+    return render(request, "accounts/reset_password.html", {"template_data": template_data})
