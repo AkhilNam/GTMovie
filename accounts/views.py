@@ -6,6 +6,7 @@ from .forms import CustomUserCreationForm, CustomErrorList
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+
 @login_required
 def logout(request):
     auth_logout(request)
@@ -66,3 +67,10 @@ def reset_password(request):
             template_data["error"] = "Username not found."
 
     return render(request, "accounts/reset_password.html", {"template_data": template_data})
+@login_required
+def orders(request):
+    template_data = {}
+    template_data['title'] = 'Orders'
+    template_data['orders'] = request.user.order_set.all()
+    return render(request, 'accounts/orders.html',
+        {'template_data': template_data})
